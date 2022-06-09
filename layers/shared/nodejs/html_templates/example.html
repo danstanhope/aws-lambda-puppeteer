@@ -1,0 +1,70 @@
+<html>
+
+<head>
+    <meta charset="utf8">
+    <script src="https://cdn.tailwindcss.com"></script>
+<body>
+    <div class="page">
+        <h1 class="text-4xl font-semibold text-gray-800 line-clamp-2 border-b-4 border-gray-200 mb-12 pb-4">My DEV.to Posts!</h1>
+        <% for(let post of posts) { %>
+            <div
+            class='mb-10 pb-10 border-b border-gray-200'
+          >
+            <div class='mr-8'>
+              <img
+                class=' w-48 object-cover rounded-lg'
+                src=<%= post.cover_image %>
+                alt='cover image'
+              />
+            </div>
+            <div class='flex-1 p-2 flex flex-col justify-between'>
+              <div class='flex-1'>
+                <p class='text-xl font-semibold text-gray-900 line-clamp-2 mt-2'>
+                    <%= post.title %>
+                </p>
+                <p class='mt-3 text-base text-gray-500 dark:text-gray-400 line-clamp-3'>
+                    <%= post.description %>
+                </p>
+      
+                <div class='flex flex-shrink-0 -space-x-1 mt-2'>
+                  <% for(let tag of post.tag_list) { %>
+                    <div class='pr-3'>
+                      <span>#</span>
+                      <%= tag %>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+              <div class='mt-6 flex items-center'>
+                <div>
+                  <div class='flex space-x-1 text-sm text-gray-500 dark:text-gray-400'>
+                    <time dateTime=<%= post.readable_publish_date %>>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        class='h-4 w-4 inline-block relative -top-0.5 mr-1'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        stroke='currentColor'
+                        stroke-width='2'
+                      >
+                        <path
+                          stroke-linecap='round'
+                          stroke-linejoin='round'
+                          d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'
+                        />
+                      </svg>
+                      <%= post.readable_publish_date %>
+                    </time>
+                    <span aria-hidden='true' class='text-gray-900 dark:text-gray-400'>
+                      &middot;
+                    </span>
+                    <span><%= post.reading_time_minutes %> min. read</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
+    </div>
+</body>
+</html>

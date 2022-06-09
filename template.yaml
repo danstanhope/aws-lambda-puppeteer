@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lambda-puppeteer
+  
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  S3UploadAccess:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: S3UploadAccess
+        Description: A role to allow our function to upload to S3
+        Policies: 
+          - PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action: 
+                    - s3:PutObject
+                  Resource: arn:aws:s3:::bucket-name/*
+  SharedLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: SharedLayer
+      Description: Some node modules and common code
+      ContentUri: layers/shared
+      CompatibleRuntimes:
+        - nodejs12.x
+      LicenseInfo: MIT
+      RetentionPolicy: Retain  
+  PuppeteerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: function/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Timeout: 900
+      MemorySize: 3008
+      Policies:
+        - S3UploadAccess      
+      Layers:
+        - !Ref SharedLayer  
+        - !Sub 'arn:aws:lambda:${AWS::Region}:764866452798:layer:chrome-aws-lambda:22'    
